@@ -294,10 +294,23 @@ def main():
 
     # 建立主視窗
     root = tk.Tk()
+
+    # 確保視窗顯示在前台
+    root.lift()
+    root.attributes('-topmost', True)
+    root.after_idle(root.attributes, '-topmost', False)
+
+    # 強制視窗獲得焦點
+    root.focus_force()
+
     app = StockPromptGenerator(root)
 
     # 設置視窗圖示和其他屬性
     root.resizable(True, True)
+
+    # 在 macOS 上確保應用程式正確顯示
+    if hasattr(tk, '_default_root') and tk._default_root:
+        root.createcommand('exit', root.quit)
 
     # 啟動程式
     root.mainloop()

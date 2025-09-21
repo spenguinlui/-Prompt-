@@ -46,10 +46,30 @@ fi
 # 切換到程式目錄
 cd "$PROJECT_DIR"
 
-# 啟動 Python 程式
-python3 "$PYTHON_SCRIPT"
+# 確保 GUI 能正確顯示
+export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
+
+# 啟動 Python 程式並確保在前台顯示
+if [[ -n "$DISPLAY" ]] || [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS 或有 DISPLAY 的環境
+    python3 "$PYTHON_SCRIPT" &
+
+    # 等待程式啟動
+    sleep 2
+
+    # 將視窗帶到前台
+    osascript -e 'tell application "Python" to activate' 2>/dev/null || \
+    osascript -e 'tell application "台股評論Prompt生成器" to activate' 2>/dev/null || \
+    true
+
+    # 等待後台進程
+    wait
+else
+    # 直接啟動
+    python3 "$PYTHON_SCRIPT"
+fi
 
 # 如果程式異常退出，顯示錯誤訊息
 if [ $? -ne 0 ]; then
-    osascript -e 'display dialog "程式執行時發生錯誤\n請檢查系統設定或聯繫技術支援" buttons {"確定"} default button "確定" with icon stop'
+    osascript -e 'display dialog "程式執行時發生錯誤\n請檢查系統設定或聯繫技術支援\n\n建議：嘗試直接執行 stock_prompt_generator.py" buttons {"確定"} default button "確定" with icon stop'
 fi

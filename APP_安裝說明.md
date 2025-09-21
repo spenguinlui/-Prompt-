@@ -54,6 +54,17 @@ xattr -d com.apple.quarantine "台股評論Prompt生成器.app"
 2. 安裝 tkinter：`brew install python-tk@3.11`
 3. 檢查安全性設定
 
+### 問題 1.5：應用程式啟動但沒有畫面
+**解決方法**：
+1. 檢查 Activity Monitor（活動監視器）中是否有 Python 進程運行
+2. 嘗試直接執行：`cd 專案目錄 && python3 stock_prompt_generator.py`
+3. 如果仍無畫面，重新啟動電腦後再試
+4. 或手動執行：
+```bash
+cd "/Users/liu/sideproject/台股評論Prompt生成器"
+python3 stock_prompt_generator.py
+```
+
 ### 問題 2：提示缺少 pyperclip
 **解決方法**（選擇任一方法）：
 ```bash
