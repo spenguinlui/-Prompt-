@@ -55,9 +55,17 @@ xattr -d com.apple.quarantine "台股評論Prompt生成器.app"
 3. 檢查安全性設定
 
 ### 問題 2：提示缺少 pyperclip
-**解決方法**：
+**解決方法**（選擇任一方法）：
 ```bash
-pip install pyperclip
+# 方法一：使用 --user 標誌
+pip install pyperclip --user
+
+# 方法二：使用 pipx
+brew install pipx
+pipx install pyperclip
+
+# 方法三：允許系統套件（不建議）
+pip install pyperclip --break-system-packages
 ```
 
 ### 問題 3：圖示不顯示
