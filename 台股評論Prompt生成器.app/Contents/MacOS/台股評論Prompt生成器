@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# 台股評論 Prompt 生成器啟動腳本
+# 獲取應用程式包的路徑
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+# 獲取 Python 程式的路徑
+PYTHON_SCRIPT="$APP_DIR/stock_prompt_generator.py"
+
+# 檢查 Python 程式是否存在
+if [ ! -f "$PYTHON_SCRIPT" ]; then
+    echo "錯誤：找不到 Python 程式檔案"
+    echo "路徑：$PYTHON_SCRIPT"
+    osascript -e 'display dialog "錯誤：找不到程式檔案\n請確認應用程式安裝完整" buttons {"確定"} default button "確定" with icon stop'
+    exit 1
+fi
+
+# 檢查是否安裝了 Python 3
+if ! command -v python3 &> /dev/null; then
+    osascript -e 'display dialog "錯誤：系統未安裝 Python 3\n請先安裝 Python 3.7 或更高版本" buttons {"確定"} default button "確定" with icon stop'
+    exit 1
+fi
+
+# 檢查是否安裝了 tkinter
+if ! python3 -c "import tkinter" 2>/dev/null; then
+    osascript -e 'display dialog "錯誤：Python 缺少 tkinter 模組\n請執行：brew install python-tk@3.11" buttons {"確定"} default button "確定" with icon stop'
+    exit 1
+fi
+
+# 檢查是否安裝了 pyperclip
+if ! python3 -c "import pyperclip" 2>/dev/null; then
+    # 嘗試自動安裝 pyperclip
+    python3 -m pip install pyperclip --user
+    if [ $? -ne 0 ]; then
+        osascript -e 'display dialog "錯誤：無法安裝 pyperclip 模組\n請手動執行：pip install pyperclip" buttons {"確定"} default button "確定" with icon stop'
+        exit 1
+    fi
+fi
+
+# 切換到程式目錄
+cd "$APP_DIR"
+
+# 啟動 Python 程式
+python3 "$PYTHON_SCRIPT"
+
+# 如果程式異常退出，顯示錯誤訊息
+if [ $? -ne 0 ]; then
+    osascript -e 'display dialog "程式執行時發生錯誤\n請檢查系統設定或聯繫技術支援" buttons {"確定"} default button "確定" with icon stop'
+fi

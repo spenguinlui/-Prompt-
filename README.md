@@ -54,10 +54,23 @@ pip install pyperclip
 
 ## 🚀 安裝與執行
 
-### 方法一：直接執行
+### 方法一：點擊應用程式圖示 ⭐️ 推薦
 ```bash
 # 克隆專案
-git clone https://github.com/your-username/台股評論Prompt生成器.git
+git clone https://github.com/spenguinlui/-Prompt-.git
+cd 台股評論Prompt生成器
+
+# 安裝依賴
+pip install -r requirements.txt
+
+# 雙擊應用程式圖示
+# 找到 "台股評論Prompt生成器.app" 並雙擊啟動
+```
+
+### 方法二：終端機執行
+```bash
+# 克隆專案
+git clone https://github.com/spenguinlui/-Prompt-.git
 cd 台股評論Prompt生成器
 
 # 安裝依賴
@@ -67,10 +80,10 @@ pip install -r requirements.txt
 python stock_prompt_generator.py
 ```
 
-### 方法二：開發模式
+### 方法三：開發模式
 ```bash
 # 克隆專案
-git clone https://github.com/your-username/台股評論Prompt生成器.git
+git clone https://github.com/spenguinlui/-Prompt-.git
 cd 台股評論Prompt生成器
 
 # 創建虛擬環境（建議）
@@ -112,13 +125,19 @@ python stock_prompt_generator.py
 
 ```
 台股評論Prompt生成器/
-├── stock_prompt_generator.py      # 主程式
-├── README.md                      # 專案說明
-├── requirements.txt               # Python 依賴
-├── .gitignore                     # Git 忽略檔案
-├── docs/                          # 文件目錄
-│   └── screenshot.png             # 應用程式截圖
-└── stock_commentary/              # 股票資料目錄
+├── stock_prompt_generator.py             # 主程式
+├── 台股評論Prompt生成器.app/             # macOS 應用程式包 ⭐️
+│   ├── Contents/
+│   │   ├── Info.plist                   # 應用程式資訊
+│   │   ├── MacOS/台股評論Prompt生成器    # 啟動腳本
+│   │   └── Resources/                   # 圖示資源
+├── README.md                            # 專案說明
+├── APP_安裝說明.md                      # 應用程式安裝指南
+├── requirements.txt                     # Python 依賴
+├── .gitignore                           # Git 忽略檔案
+├── docs/                                # 文件目錄
+│   └── screenshot.png                   # 應用程式截圖
+└── stock_commentary/                    # 股票資料目錄
     └── data/
         ├── taiwan_stocks_latest.json    # 台股清單（JSON）
         ├── taiwan_stocks_latest.csv     # 台股清單（CSV）
@@ -158,6 +177,13 @@ python comprehensive_stock_list_crawler.py
 5. 開啟 Pull Request
 
 ## 📝 變更日誌
+
+### v1.3.0 (2025-09-21)
+- 📱 新增 macOS 應用程式包（.app）
+- ✅ 可點擊圖示直接啟動，無需終端機
+- ✅ 自動檢查依賴套件並提示安裝
+- ✅ 精美的應用程式圖示設計
+- ✅ 完整的安裝說明文件
 
 ### v1.2.0 (2025-09-21)
 - 🔄 大幅更新 ChatGPT 範本
