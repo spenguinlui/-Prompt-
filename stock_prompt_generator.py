@@ -120,7 +120,12 @@ class StockPromptGenerator:
         # 股票搜尋框
         ttk.Label(stock_frame, text="搜尋：").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
         self.search_var = tk.StringVar()
-        self.search_var.trace('w', self.filter_stocks)
+        # 修復 Python 3.13 tkinter trace 語法
+        try:
+            self.search_var.trace('w', self.filter_stocks)
+        except tk.TclError:
+            # Python 3.13+ 新語法
+            self.search_var.trace_add('write', self.filter_stocks)
         search_entry = ttk.Entry(stock_frame, textvariable=self.search_var, width=25)
         search_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(0, 15))
 
