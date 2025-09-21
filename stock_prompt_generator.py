@@ -20,10 +20,10 @@ class StockPromptGenerator:
     def __init__(self, root):
         self.root = root
         self.root.title("股票評論 Prompt 生成器")
-        self.root.geometry("1400x900")
+        self.root.geometry("700x450")
 
         # 設定最小視窗大小
-        self.root.minsize(1200, 700)
+        self.root.minsize(600, 350)
 
         # 載入股票資料
         self.stocks_data = self.load_stocks_data()
@@ -184,8 +184,8 @@ class StockPromptGenerator:
         self.result_text = scrolledtext.ScrolledText(
             main_frame,
             wrap=tk.WORD,
-            width=100,
-            height=25,
+            width=80,
+            height=15,
             font=("SF Mono", 11)
         )
         self.result_text.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(2, 0))
