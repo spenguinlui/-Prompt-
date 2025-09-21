@@ -20,7 +20,10 @@ class StockPromptGenerator:
     def __init__(self, root):
         self.root = root
         self.root.title("股票評論 Prompt 生成器")
-        self.root.geometry("1000x800")
+        self.root.geometry("1400x900")
+
+        # 設定最小視窗大小
+        self.root.minsize(1200, 700)
 
         # 載入股票資料
         self.stocks_data = self.load_stocks_data()
@@ -84,8 +87,8 @@ class StockPromptGenerator:
         # 配置網格權重
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(3, weight=1)
+        main_frame.columnconfigure(1, weight=3)  # 增加右側權重
+        main_frame.rowconfigure(5, weight=1)     # 文字區域權重
 
         # 1. Prompt 範本選擇區
         ttk.Label(main_frame, text="選擇 Prompt 範本：", font=("Arial", 12, "bold")).grid(
@@ -112,18 +115,19 @@ class StockPromptGenerator:
         stock_frame = ttk.Frame(main_frame)
         stock_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(20, 5))
         stock_frame.columnconfigure(1, weight=1)
+        stock_frame.columnconfigure(3, weight=1)
 
         # 股票搜尋框
         ttk.Label(stock_frame, text="搜尋：").grid(row=0, column=0, sticky=tk.W, padx=(0, 5))
         self.search_var = tk.StringVar()
         self.search_var.trace('w', self.filter_stocks)
-        search_entry = ttk.Entry(stock_frame, textvariable=self.search_var, width=30)
-        search_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(0, 10))
+        search_entry = ttk.Entry(stock_frame, textvariable=self.search_var, width=25)
+        search_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(0, 15))
 
         # 股票下拉選單
         ttk.Label(stock_frame, text="股票：").grid(row=0, column=2, sticky=tk.W, padx=(0, 5))
         self.stock_var = tk.StringVar()
-        self.stock_combobox = ttk.Combobox(stock_frame, textvariable=self.stock_var, width=40, state="readonly")
+        self.stock_combobox = ttk.Combobox(stock_frame, textvariable=self.stock_var, width=50, state="readonly")
         self.stock_combobox.grid(row=0, column=3, sticky=(tk.W, tk.E))
 
         # 初始化股票選項
@@ -149,20 +153,20 @@ class StockPromptGenerator:
 
         ttk.Button(
             button_frame,
-            text="生成 Prompt",
+            text="🚀 生成 Prompt",
             command=self.generate_prompt,
             style="Accent.TButton"
-        ).pack(side=tk.LEFT, padx=(0, 10))
+        ).pack(side=tk.LEFT, padx=(0, 15))
 
         ttk.Button(
             button_frame,
-            text="複製到剪貼簿",
+            text="📋 複製到剪貼簿",
             command=self.copy_to_clipboard
-        ).pack(side=tk.LEFT, padx=(0, 10))
+        ).pack(side=tk.LEFT, padx=(0, 15))
 
         ttk.Button(
             button_frame,
-            text="清空內容",
+            text="🗑️ 清空內容",
             command=self.clear_content
         ).pack(side=tk.LEFT)
 
@@ -175,9 +179,9 @@ class StockPromptGenerator:
         self.result_text = scrolledtext.ScrolledText(
             main_frame,
             wrap=tk.WORD,
-            width=80,
-            height=20,
-            font=("Consolas", 10)
+            width=100,
+            height=25,
+            font=("SF Mono", 11)
         )
         self.result_text.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(5, 0))
 

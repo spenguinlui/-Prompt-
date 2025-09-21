@@ -46,26 +46,43 @@ fi
 # 切換到程式目錄
 cd "$PROJECT_DIR"
 
-# 確保 GUI 能正確顯示
+# 設定環境變數確保 GUI 正確顯示
 export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
 
-# 啟動 Python 程式並確保在前台顯示
-if [[ -n "$DISPLAY" ]] || [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS 或有 DISPLAY 的環境
-    python3 "$PYTHON_SCRIPT" &
+# 在 macOS 上啟動 GUI 應用程式
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # 使用 nohup 確保程式在背景運行
+    nohup python3 "$PYTHON_SCRIPT" > /dev/null 2>&1 &
 
-    # 等待程式啟動
-    sleep 2
+    # 記錄進程 ID
+    PYTHON_PID=$!
 
-    # 將視窗帶到前台
-    osascript -e 'tell application "Python" to activate' 2>/dev/null || \
-    osascript -e 'tell application "台股評論Prompt生成器" to activate' 2>/dev/null || \
-    true
+    # 等待程式啟動並檢查是否成功
+    sleep 3
 
-    # 等待後台進程
-    wait
+    # 檢查進程是否還在運行
+    if kill -0 $PYTHON_PID 2>/dev/null; then
+        # 嘗試激活視窗
+        osascript -e '
+        tell application "System Events"
+            try
+                set frontmost of first process whose name contains "Python" to true
+            end try
+        end tell
+        ' 2>/dev/null
+
+        # 顯示成功訊息（可選）
+        # osascript -e 'display notification "台股評論 Prompt 生成器已啟動" with title "應用程式啟動"' 2>/dev/null
+
+        # 等待進程結束
+        wait $PYTHON_PID
+    else
+        # 程式啟動失敗
+        osascript -e 'display dialog "程式啟動失敗\n請嘗試直接執行：python3 stock_prompt_generator.py" buttons {"確定"} default button "確定" with icon stop'
+        exit 1
+    fi
 else
-    # 直接啟動
+    # 非 macOS 系統直接啟動
     python3 "$PYTHON_SCRIPT"
 fi
 
