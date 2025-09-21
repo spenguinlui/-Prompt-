@@ -159,6 +159,13 @@ python comprehensive_stock_list_crawler.py
 
 ## 📝 變更日誌
 
+### v1.2.0 (2025-09-21)
+- 🔄 大幅更新 ChatGPT 範本
+- ✅ 強化目標價收斂邏輯（Low/Mid/High + 單一 Mid）
+- ✅ 新增估值決策樹（PE/P/B/PS 代理路徑）
+- ✅ 增強可執行觸發條件與出場規則
+- ✅ 量化門檻標準化（S_flow, R_float, z_V, CR）
+
 ### v1.1.0 (2025-09-21)
 - 🔄 更新 prompt 範本格式
 - ✅ 支援新的日期參數 `{DATE_TPE}`
