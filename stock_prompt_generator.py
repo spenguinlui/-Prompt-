@@ -81,7 +81,7 @@ class StockPromptGenerator:
     def setup_ui(self):
         """設置使用者介面"""
         # 主框架
-        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame = ttk.Frame(self.root, padding="5")
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # 配置網格權重
@@ -92,12 +92,12 @@ class StockPromptGenerator:
 
         # 1. Prompt 範本選擇區
         ttk.Label(main_frame, text="選擇 Prompt 範本：", font=("Arial", 12, "bold")).grid(
-            row=0, column=0, sticky=tk.W, pady=(0, 3)
+            row=0, column=0, sticky=tk.W, pady=(0, 2)
         )
 
         self.template_var = tk.StringVar(value="Perplexity")
         template_frame = ttk.Frame(main_frame)
-        template_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 3))
+        template_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 2))
 
         for i, template_name in enumerate(self.prompt_templates.keys()):
             ttk.Radiobutton(
@@ -109,11 +109,11 @@ class StockPromptGenerator:
 
         # 2. 股票選擇區
         ttk.Label(main_frame, text="選擇股票：", font=("Arial", 12, "bold")).grid(
-            row=1, column=0, sticky=tk.W, pady=(8, 3)
+            row=1, column=0, sticky=tk.W, pady=(5, 2)
         )
 
         stock_frame = ttk.Frame(main_frame)
-        stock_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(8, 3))
+        stock_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=(5, 2))
         stock_frame.columnconfigure(1, weight=1)
         stock_frame.columnconfigure(3, weight=1)
 
@@ -140,11 +140,11 @@ class StockPromptGenerator:
 
         # 3. 日期顯示區
         ttk.Label(main_frame, text="分析日期：", font=("Arial", 12, "bold")).grid(
-            row=2, column=0, sticky=tk.W, pady=(8, 3)
+            row=2, column=0, sticky=tk.W, pady=(5, 2)
         )
 
         date_frame = ttk.Frame(main_frame)
-        date_frame.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=(8, 3))
+        date_frame.grid(row=2, column=1, sticky=(tk.W, tk.E), pady=(5, 2))
 
         today = datetime.now().strftime("%Y-%m-%d")
         self.date_var = tk.StringVar(value=today)
@@ -154,7 +154,7 @@ class StockPromptGenerator:
 
         # 4. 操作按鈕區
         button_frame = ttk.Frame(main_frame)
-        button_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 5))
+        button_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(6, 3))
 
         ttk.Button(
             button_frame,
@@ -177,7 +177,7 @@ class StockPromptGenerator:
 
         # 5. 結果顯示區
         ttk.Label(main_frame, text="生成的 Prompt：", font=("Arial", 12, "bold")).grid(
-            row=4, column=0, sticky=tk.W, pady=(8, 3)
+            row=4, column=0, sticky=tk.W, pady=(5, 2)
         )
 
         # 文字顯示區域
@@ -188,7 +188,7 @@ class StockPromptGenerator:
             height=25,
             font=("SF Mono", 11)
         )
-        self.result_text.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(3, 0))
+        self.result_text.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(2, 0))
 
         # 配置樣式
         self.setup_styles()
