@@ -248,6 +248,8 @@ class StockPromptGenerator:
             # 替換範本中的參數
             generated_prompt = template_content.replace("{TICKER}", ticker)
             generated_prompt = generated_prompt.replace("{NAME}", name)
+            generated_prompt = generated_prompt.replace("{DATE_TPE}", date)
+            # 向下相容：如果範本中仍有舊格式的日期參數也一併替換
             generated_prompt = generated_prompt.replace("{TODAY_YYYY-MM-DD}", date)
 
             # 顯示結果
