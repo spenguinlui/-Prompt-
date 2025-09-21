@@ -299,15 +299,15 @@ def main():
     # 建立主視窗
     root = tk.Tk()
 
-    # 確保視窗顯示在前台
+    # 初始化應用程式
+    app = StockPromptGenerator(root)
+
+    # 確保視窗顯示在前台（在應用程式初始化後）
+    root.update_idletasks()
     root.lift()
     root.attributes('-topmost', True)
     root.after_idle(root.attributes, '-topmost', False)
-
-    # 強制視窗獲得焦點
     root.focus_force()
-
-    app = StockPromptGenerator(root)
 
     # 設置視窗圖示和其他屬性
     root.resizable(True, True)

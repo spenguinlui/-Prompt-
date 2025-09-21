@@ -1,92 +1,37 @@
 #!/bin/bash
 
 # 台股評論 Prompt 生成器啟動腳本
-# 獲取應用程式包的路徑
 APP_BUNDLE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-# 獲取專案根目錄（應用程式包的父目錄）
 PROJECT_DIR="$(dirname "$APP_BUNDLE")"
-
-# 獲取 Python 程式的路徑
 PYTHON_SCRIPT="$PROJECT_DIR/stock_prompt_generator.py"
 
-# 檢查 Python 程式是否存在
+# 快速檢查必要檔案和依賴
 if [ ! -f "$PYTHON_SCRIPT" ]; then
-    echo "錯誤：找不到 Python 程式檔案"
-    echo "路徑：$PYTHON_SCRIPT"
-    osascript -e 'display dialog "錯誤：找不到程式檔案\n請確認應用程式安裝完整" buttons {"確定"} default button "確定" with icon stop'
+    osascript -e 'display dialog "找不到程式檔案\n路徑：'"$PYTHON_SCRIPT"'" buttons {"確定"} with icon stop'
     exit 1
 fi
 
-# 檢查是否安裝了 Python 3
 if ! command -v python3 &> /dev/null; then
-    osascript -e 'display dialog "錯誤：系統未安裝 Python 3\n請先安裝 Python 3.7 或更高版本" buttons {"確定"} default button "確定" with icon stop'
+    osascript -e 'display dialog "未安裝 Python 3\n請先安裝 Python" buttons {"確定"} with icon stop'
     exit 1
 fi
 
-# 檢查是否安裝了 tkinter
 if ! python3 -c "import tkinter" 2>/dev/null; then
-    osascript -e 'display dialog "錯誤：Python 缺少 tkinter 模組\n請執行：brew install python-tk@3.11" buttons {"確定"} default button "確定" with icon stop'
+    osascript -e 'display dialog "缺少 tkinter\n請執行：brew install python-tk@3.11" buttons {"確定"} with icon stop'
     exit 1
 fi
 
-# 檢查是否安裝了 pyperclip
+# 自動安裝 pyperclip（如果缺少）
 if ! python3 -c "import pyperclip" 2>/dev/null; then
-    # 嘗試自動安裝 pyperclip
     python3 -m pip install pyperclip --user --break-system-packages 2>/dev/null || \
-    python3 -m pip install pyperclip --user 2>/dev/null || \
-    pipx install pyperclip 2>/dev/null
+    python3 -m pip install pyperclip --user 2>/dev/null
 
-    # 再次檢查是否安裝成功
     if ! python3 -c "import pyperclip" 2>/dev/null; then
-        osascript -e 'display dialog "錯誤：無法安裝 pyperclip 模組\n\n請選擇以下任一方法安裝：\n• 終端機執行：pip install pyperclip --user\n• 或：brew install pipx && pipx install pyperclip\n• 或：python3 -m pip install pyperclip --break-system-packages" buttons {"確定"} default button "確定" with icon stop'
+        osascript -e 'display dialog "無法安裝 pyperclip\n請手動執行：pip install pyperclip --user" buttons {"確定"} with icon stop'
         exit 1
     fi
 fi
 
-# 切換到程式目錄
+# 切換到正確目錄並啟動
 cd "$PROJECT_DIR"
-
-# 設定環境變數確保 GUI 正確顯示
-export PYTHONPATH="$PROJECT_DIR:$PYTHONPATH"
-
-# 在 macOS 上啟動 GUI 應用程式
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # 使用 nohup 確保程式在背景運行
-    nohup python3 "$PYTHON_SCRIPT" > /dev/null 2>&1 &
-
-    # 記錄進程 ID
-    PYTHON_PID=$!
-
-    # 等待程式啟動並檢查是否成功
-    sleep 3
-
-    # 檢查進程是否還在運行
-    if kill -0 $PYTHON_PID 2>/dev/null; then
-        # 嘗試激活視窗
-        osascript -e '
-        tell application "System Events"
-            try
-                set frontmost of first process whose name contains "Python" to true
-            end try
-        end tell
-        ' 2>/dev/null
-
-        # 顯示成功訊息（可選）
-        # osascript -e 'display notification "台股評論 Prompt 生成器已啟動" with title "應用程式啟動"' 2>/dev/null
-
-        # 等待進程結束
-        wait $PYTHON_PID
-    else
-        # 程式啟動失敗
-        osascript -e 'display dialog "程式啟動失敗\n請嘗試直接執行：python3 stock_prompt_generator.py" buttons {"確定"} default button "確定" with icon stop'
-        exit 1
-    fi
-else
-    # 非 macOS 系統直接啟動
-    python3 "$PYTHON_SCRIPT"
-fi
-
-# 如果程式異常退出，顯示錯誤訊息
-if [ $? -ne 0 ]; then
-    osascript -e 'display dialog "程式執行時發生錯誤\n請檢查系統設定或聯繫技術支援\n\n建議：嘗試直接執行 stock_prompt_generator.py" buttons {"確定"} default button "確定" with icon stop'
-fi
+exec python3 "$PYTHON_SCRIPT"
